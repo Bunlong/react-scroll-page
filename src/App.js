@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import axios from 'axios';
 
 import createReactClass from 'create-react-class';
 
@@ -33,7 +32,7 @@ const InfiniteData = createReactClass({
     var i = 0;
     var data = [];
     for (i = 0; i < counter; i++) {
-      var tempData = (<div key={startKey+i} className="data-info">Data {startKey+i}</div>);
+      var tempData = (<div key={startKey+i} className="data-info">rocord {startKey+i}</div>);
       data.push(tempData);
     }
 
@@ -81,7 +80,7 @@ const InfiniteData = createReactClass({
           if (this.state.requestSent) {
             return(
               <div className="data-loading">
-                <i className="fa fa-refresh fa-spin">Refresh</i>
+                <i className="fa fa-refresh fa-spin">Refresh...</i>
               </div>
             );
           } else {
