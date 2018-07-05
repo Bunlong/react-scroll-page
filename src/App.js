@@ -17,25 +17,24 @@ const InfiniteData = createReactClass({
   componentDidMount: function() {
     window.addEventListener('scroll', this.handleOnScroll);
 
-    this.initFakeData();
+    this.initData();
   },
 
   componentWillUnmount: function() {
     window.removeEventListener('scroll', this.handleOnScroll);
   },
 
-  initFakeData: function() {
-    var data = this.createFakeData(this.state.data.length, 100);
-
+  initData: function() {
+    var data = this.loadData(this.state.data.length, 100);
     this.setState({data: data});
   },
 
-  createFakeData: function(startKey, counter) {
+  loadData: function(startKey, counter) {
     var i = 0;
     var data = [];
     for (i = 0; i < counter; i++) {
-      var fakeData = (<div key={startKey+i} className="data-info">Fake Data {startKey+i}</div>);
-      data.push(fakeData);
+      var tempData = (<div key={startKey+i} className="data-info">Data {startKey+i}</div>);
+      data.push(tempData);
     }
 
     return data;
@@ -47,24 +46,27 @@ const InfiniteData = createReactClass({
     }
 
     // enumerate a slow query
-    setTimeout(this.doQuery, 1000);
+    setTimeout(this.query, 1000);
 
     this.setState({requestSent: true});
   },
 
-  doQuery: function() {
-    var fakeData = this.createFakeData(this.state.data.length, 20);
-    var newData = this.state.data.concat(fakeData);
+  query: function() {
+    var data = this.loadData(this.state.data.length, 20);
+    var newData = this.state.data.concat(data);
     this.setState({data: newData, requestSent: false});
   },  
 
-  handleOnScroll: function() {
+  isAtBottom() {
     var scrollTop = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
     var scrollHeight = (document.documentElement && document.documentElement.scrollHeight) || document.body.scrollHeight;
     var clientHeight = document.documentElement.clientHeight || window.innerHeight;
     var scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+    return scrolledToBottom;
+  },
 
-    if (scrolledToBottom) {
+  handleOnScroll: function() {
+    if (this.isAtBottom()) {
       this.querySearchResult();
     }
   },
@@ -79,7 +81,7 @@ const InfiniteData = createReactClass({
           if (this.state.requestSent) {
             return(
               <div className="data-loading">
-                <i className="fa fa-refresh fa-spin"></i>
+                <i className="fa fa-refresh fa-spin">Refresh</i>
               </div>
             );
           } else {
